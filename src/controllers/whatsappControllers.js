@@ -1,3 +1,8 @@
+const fs = require("fs");
+const myConsole = new console.Console(fs.createWriteStream("./logs.txt"));
+const whatsappService = require("../services/whatsappService");
+
+
 const VerifyToken = (req, res) => {
     try{
         var accessToken = "RTQWWTVHBDEJHJKIKIKNDS9090DS";
@@ -16,7 +21,51 @@ const VerifyToken = (req, res) => {
 }
 
 const ReceivedMessage = (req, res) => {
-    res.send("hola Received")
+    try{
+        var entry = (req.body["entry"])[0];
+        var changes = (entry["changes"])[0];
+        var value = changes["value"];
+        var messageObject = value["messages"];
+
+        if(typeof messageObject != "undefined"){
+            var messages = messageObject[0];
+            var number = messages["from"];
+            var text = GetTextUser(messages);
+            
+            whatsappService.SendMessageWhatsApp("el susuario dijo: "+ text, number)
+
+        }        
+
+        res.send("EVENT_RECEIVED");
+    }catch(e){
+        myConsole.log(e);
+        res.send("EVENT_RECEIVED");
+    }
+}
+
+function GetTextUser(messages){
+    var text = "";
+    var typeMessge = messages["type"];
+    if(typeMessge == "text"){
+        text = (messages["text"])["body"];
+    }
+    else if(typeMessge == "interactive"){
+
+        var interactiveObject = messages["interactive"];
+        var typeInteractive = interactiveObject["type"];
+        
+        if(typeInteractive == "button_reply"){
+            text = (interactiveObject["button_reply"])["title"];
+        }
+        else if(typeInteractive == "list_reply"){
+            text = (interactiveObject["list_reply"])["title"];
+        }else{
+            myConsole.log("sin mensaje");
+        }
+    }else{
+        myConsole.log("sin mensaje");
+    }
+    return text;
 }
 
 module.exports = {
