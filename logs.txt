@@ -4,7 +4,7 @@
     id: 'wamid.HBgLNTE5NDM2NjI5NjQVAgASGBQzQUNCODUzN0U1QkU5MkZENTFBQwA=',
     Timestamp: '1660362642',
     type: 'text',
-    text: { body: 'hola ...' },
+    text: { body: 'HOLA VITO ' },
     interactive: null,
     image: null,
     audio: null,

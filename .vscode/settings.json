@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/7fa94d33-5c60-47bf-bdfc-295687a226eb/resourceGroups/ogguivitoRecu/providers/Microsoft.Web/sites/ogguivito",
+  "appService.deploySubpath": "src"
+}

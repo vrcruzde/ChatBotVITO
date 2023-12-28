@@ -1,6 +1,7 @@
 const fs = require("fs");
 const myConsole = new console.Console(fs.createWriteStream("./logs.txt"));
 const whatsappService = require("../services/whatsappService");
+const samples = require ("../shared/sampleModels")
 
 
 const VerifyToken = (req, res) => {
@@ -27,15 +28,49 @@ const ReceivedMessage = (req, res) => {
         var value = changes["value"];
         var messageObject = value["messages"];
 
+        
         if(typeof messageObject != "undefined"){
             var messages = messageObject[0];
-            var number = messages["from"];
+           var number = messages["from"];
             var text = GetTextUser(messages);
+                 
+            if(text == "text"){
+                var data = samples.sampleText("Hola Vito", number);
+                whatsappService.SendMessageWhatsApp(data)
+            }else if(text == "image"){
+                var data = samples.sampleImage(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "video"){
+                var data = samples.sampleVideo(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "document"){
+                var data = samples.sampleDocument(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "audio"){
+                var data = samples.sampleAudio(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "button"){
+                var data = samples.sampleButton(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "location"){
+                var data = samples.sampleLocation(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else if(text == "list"){
+                var data = samples.SampleList(number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
+            else{
+                var data = samples.sampleText("No entiendo Att: VITO", number);
+                whatsappService.SendMessageWhatsApp(data)
+            }
 
-            myConsole.log(text);
-            whatsappService.SendMessageWhatsApp("el susuario dijo: "+ text, number)
-
-        }        
+       }        
 
         res.send("EVENT_RECEIVED");
     }catch(e){
